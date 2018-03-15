@@ -41,7 +41,7 @@ export function createPostAPI( post ) {
 	console.log('--- api fetch create post ## ' + JSON.stringify(post));
   var headers = new Headers();
   headers.append('Content-Type', 'application/json');
-  headers.append('Authorization', "_AUTH_KEY");
+  headers.append('Authorization', 'whatever-you-want');
   var init = {
     method: 'POST',
     headers: headers
