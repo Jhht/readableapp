@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import{createPost} from '../../actions';
+import{createPost, getPostById} from '../../actions';
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
 
 
@@ -13,6 +13,15 @@ class PostForm extends Component {
     title: '',
     body: '',
   };
+
+  componentWillMount(){
+    if(this.props.match.params.postId != null){
+      this.props.getPostById(this.props.match.params.postId)
+      console.log('--->' + this.props.post)
+
+    }
+  }
+
 
 
   // initialState, handlers
@@ -76,31 +85,37 @@ class PostForm extends Component {
 
   render() {
     const {author, category, title, body} = this.state
-    const {categories} = this.props;
+    const {categories, post} = this.props;
+
+    if(post != null){
+      console.log('## post ' + post.title)
+    
+    }
+      console.log('## post ' + post.author)
 
     return (
       <form onSubmit={this.handleSubmit}>
+              <input defaultValue={post.title} type="text" name="title" className="field-long" />
         <FormGroup controlId="postAuthor">
           <ControlLabel>Author</ControlLabel>
           <FormControl type="text" name="author" placeholder="Author Name" value={author} onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup controlId="postTitle">
           <ControlLabel>Title</ControlLabel>
-          <FormControl type="text" name="title" placeholder="Title" value={title} onChange={this.handleChange}/>
+          <FormControl type="textarea" name="title" placeholder="Title" value={post.title} onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup controlId="postBody">
           <ControlLabel>Body</ControlLabel>
-          <FormControl componentClass="textarea" name="body" placeholder="Body" value={body} onChange={this.handleChange}/>
+          <FormControl componentClass="textarea" name="body" placeholder="Body" value={post.body} onChange={this.handleChange}/>
         </FormGroup>
-        <Button bsStyle="primary" type="submit" >Create Post</Button>
-        <Button bsStyle="primary" type="cancel" >Cancel</Button>
+        <Button bsStyle="primary" type="submit" >Save</Button>
+        <Button bsStyle="primary" type="button" >Cancel</Button>
       </form>
     )
   }
 }
 
-const mapStateToProps = ({categories, posts}) => ({ categories, posts})
-const mapDispatchToProps = {createPost}
+const mapStateToProps = ({categories, post}) => ({ categories, post})
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm)
+export default connect(mapStateToProps, {createPost , getPostById})(PostForm)

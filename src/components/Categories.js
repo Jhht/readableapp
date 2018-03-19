@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { getAllCategories} from '../actions'
 
 
 class Categories extends Component {
+
+  componentDidMount(){
+    this.props.getAllCategories();
+  }
 
   render() {  
     console.log('cats ' + JSON.stringify(this.props.categories))
@@ -42,4 +47,4 @@ const All = () => {
 
 const mapStateToProps = ({ categories}) => ({ categories})
 
-export default connect(mapStateToProps )(Categories)
+export default connect(mapStateToProps, {getAllCategories} )(Categories)

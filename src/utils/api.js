@@ -22,6 +22,17 @@ export function fetchAllPosts( ){
 		
 }
 
+export function fetchPostById( id ){
+
+	const url = 'http://localhost:3001';
+
+	console.log('--- api fetch by id' + JSON.stringify(id));
+	return fetch(`${url}/posts/${id}`, { headers: { 'Authorization': 'whatever-you-want', 'Content-Type' : 'application/json' }})
+		.then((res) =>  res.json()
+		)
+		
+}
+
 export function fetchPostsByCategory( category ) {
 
 

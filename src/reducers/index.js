@@ -8,7 +8,8 @@ import {
     GET_POSTS,
     GET_CATEGORIES,
     GET_POSTS_BY_CAT,
-    CREATE_POST
+    CREATE_POST,
+    GET_POST_BY_ID
 } from '../actions'
 
 
@@ -27,9 +28,24 @@ function categories (state = [], action){
     }
 }
 
+function post (state = {}, action){
+
+    console.log(' --- reducer post' + JSON.stringify(state));
+
+    switch(action.type){
+      case GET_POST_BY_ID:
+        return{
+          ...state,
+          ...action.post
+        }
+      default:
+        return state
+    }
+}
+
 function posts (state = {} , action){
 
-	console.log(' --- reducer posts' + state);
+	console.log(' --- reducer posts' + JSON.stringify(state));
 
 	switch(action.type) {
          case CREATE_POST:
@@ -54,4 +70,4 @@ function posts (state = {} , action){
 	}
 }
 
-export default combineReducers({posts , categories })
+export default combineReducers({posts , categories, post})

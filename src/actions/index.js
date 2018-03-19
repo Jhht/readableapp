@@ -1,10 +1,12 @@
-import { fetchCategories , fetchAllPosts, fetchPostsByCategory, createPostAPI} from '../utils/api'
+import { fetchCategories , fetchAllPosts, fetchPostsByCategory, createPostAPI, fetchPostById } from '../utils/api'
 import api from '../utils/api'
 
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POSTS_BY_CAT = 'GET_POSTS_BY_CAT'
+export const GET_POST_BY_ID = 'GET_POST_BY_ID'
 export const GET_CATEGORIES = 'GET_CATEGORIES'
 export const CREATE_POST = 'CREATE_POST'
+
 
 
 //--------- Category actions
@@ -47,6 +49,18 @@ export const getPostsByCategory = ( category ) => dispatch => (
           })
 )
 
+export const getPostById= ( id ) => dispatch => (
+    fetchPostById( id )
+     .then(
+      post => {
+           console.log('api posts id ' + JSON.stringify(post))
+
+            dispatch({
+              type: GET_POST_BY_ID,
+              post           
+            })
+          })
+)
 
 export const createPost = ( post ) => dispatch => (
   createPostAPI( post )
