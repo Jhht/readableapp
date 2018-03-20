@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import{createPost, getPostById} from '../../actions';
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
-import FormPost from './formPost'
-import { initialize } from 'redux-form';
-
 
 
 class PostForm extends Component {
-
+ 
+  initialState = {
+    author: '',
+    category: 'select',
+    title: '',
+    body: '',
+  };
 
   componentDidMount(){
     if(this.props.match.params.postId != null){
@@ -39,6 +42,7 @@ class PostForm extends Component {
 
   // handle form submission
   handleSubmit(event) {
+    event.preventDefault();
 
     this.createPost();
     
@@ -61,10 +65,17 @@ class PostForm extends Component {
   // create a new post
   createPost() {
     const {author, category, title, body} = this.state;
-    const { history , post} = this.props;
+    const { history } = this.props;
 
 
-   
+    const post = {//testing
+      id : 'dsfds',
+      author : author,
+      category : 'udacity',
+      title : title,
+      body : body
+    }
+
     this.props.createPost( post ).then( 
       history.push(`/`)
     );
@@ -73,25 +84,33 @@ class PostForm extends Component {
 
 
   render() {
-
-    
+    const {author, category, title, body} = this.state
     const {categories, post} = this.props;
-
-    let formDefaults
 
     if(post != null){
       console.log('## post ' + post.title)
-
-
-      
-    }else{
-
-    }
-
     
+    }
+      console.log('## post ' + post.author)
 
     return (
-      <FormPost onSubmit={this.handleSubmit.bind(this)} post={post} initialValues={{'title': post.title}}/>
+      <form onSubmit={this.handleSubmit}>
+              <input defaultValue={post.title} type="text" name="title" className="field-long" />
+        <FormGroup controlId="postAuthor">
+          <ControlLabel>Author</ControlLabel>
+          <FormControl type="text" name="author" placeholder="Author Name" value={author} onChange={this.handleChange}/>
+        </FormGroup>
+        <FormGroup controlId="postTitle">
+          <ControlLabel>Title</ControlLabel>
+          <FormControl type="textarea" name="title" placeholder="Title" value={post.title} onChange={this.handleChange}/>
+        </FormGroup>
+        <FormGroup controlId="postBody">
+          <ControlLabel>Body</ControlLabel>
+          <FormControl componentClass="textarea" name="body" placeholder="Body" value={post.body} onChange={this.handleChange}/>
+        </FormGroup>
+        <Button bsStyle="primary" type="submit" >Save</Button>
+        <Button bsStyle="primary" type="button" >Cancel</Button>
+      </form>
     )
   }
 }

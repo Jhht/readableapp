@@ -1,8 +1,9 @@
 
-import { reducer as formReducer } from 'redux-form';
+import { reducer as postReducer } from 'redux-form';
 import {combineReducers} from 'redux'
 import { fetchCategories , fetchAllPosts} from '../utils/api'
 import {objectFromArray} from '../utils/helpers'
+
 
 import {
     GET_POSTS,
@@ -70,4 +71,4 @@ function posts (state = {} , action){
 	}
 }
 
-export default combineReducers({posts , categories, post})
+export default combineReducers({posts , categories, post, form : postReducer})

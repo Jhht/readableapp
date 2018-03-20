@@ -6,6 +6,7 @@ import Post from './Post'
 import { Route, Switch } from 'react-router-dom'
 import ReadableIndex from './ReadableIndex'
 import { Link } from 'react-router-dom'
+import CreatePost from './CreatePost'
 import CreateEditPost from './CreateEditPost'
 import { connect } from 'react-redux'
 import { Provider } from 'react-redux'
@@ -26,7 +27,7 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
                <Route exact path ='/'  component={ReadableIndex}/>
-                <Route exact path='/new' component={CreateEditPost} />
+                <Route exact path='/new' component={CreatePost} />
                 <Route exact path='/edit/:postId' component={CreateEditPost} />     
                 <Route exact path='/:category' component={Posts} />
                 <Route exact path='/:category/:postId' component={Post} />
