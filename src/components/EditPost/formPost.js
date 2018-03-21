@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { reduxForm } from 'redux-form';
+import { Field,  reduxForm } from 'redux-form';
 import { initialize } from 'redux-form';
 
 
@@ -22,8 +22,13 @@ class FormPost extends Component {
     console.log('## form' + JSON.stringify(this.props))
     return (
       <form onSubmit={handleSubmit}>
-        <label>Title</label>
-        <input type="text" {...title} /> 
+          <label> Title </label>
+          <Field
+            name="title"
+            component="input"
+            type="text"
+            placeholder="Title"
+          />
         <button onClick={this.props.handleSubmit}>Submit</button>
       </form>
     );

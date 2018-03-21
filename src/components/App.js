@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom'
 import ReadableIndex from './ReadableIndex'
 import { Link } from 'react-router-dom'
 import CreatePost from './CreatePost'
-import CreateEditPost from './CreateEditPost'
+import CreateEditPost from './EditPost'
 import { connect } from 'react-redux'
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom';
