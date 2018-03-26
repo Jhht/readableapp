@@ -40,7 +40,7 @@ class PostForm extends Component {
   // handle form submission
   handleSubmit(event) {
 
-    this.createPost();
+    this.editPost();
     
     // call onSubmit function (if available)
     const {onSubmit} = this.props;
@@ -51,24 +51,17 @@ class PostForm extends Component {
 
   // handle cancellation
   handleCancel() {
-    // call onCancel function (if available)
-    const {onCancel} = this.props;
-    if (onCancel) {
-      onCancel();
-    }
+    const { history , post} = this.props;
+    history.push(`/`)
+
   }
 
   // create a new post
-  createPost() {
-    const {author, category, title, body} = this.state;
+  editPost() {
     const { history , post} = this.props;
 
-
+    console.log('-----> editPost ' + JSON.stringify(this.state));
    
-    this.props.createPost( post ).then( 
-      history.push(`/`)
-    );
-
   }
 
 
@@ -91,7 +84,7 @@ class PostForm extends Component {
     
 
     return (
-      <FormPost onSubmit={this.handleSubmit.bind(this)} post={post} initialValues={{'title': post.title}}/>
+      <FormPost onSubmit={this.handleSubmit.bind(this)} post={post} initialValues={{'title': post.title, 'author': post.author, 'timestamp' : post.timestamp, 'body': post.body}}/>
     )
   }
 }

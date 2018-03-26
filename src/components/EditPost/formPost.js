@@ -10,6 +10,8 @@ class FormPost extends Component {
     this.setState({ [name]: value });
   }
   
+  //category fetch
+
 
   render() {
      const {
@@ -29,6 +31,27 @@ class FormPost extends Component {
             type="text"
             placeholder="Title"
           />
+          <label> Author </label>
+          <Field
+            name="author"
+            component="input"
+            type="text"
+            placeholder="Author"
+          />
+          <label> timestamp </label>
+          <Field
+            name="title"
+            component="input"
+            type="text"
+            placeholder="Title"
+          />
+          <label> Category </label>
+          <select
+            name="title"
+            component="input"
+            type="text"
+            placeholder="Title"
+          />
         <button onClick={this.props.handleSubmit}>Submit</button>
       </form>
     );
@@ -40,7 +63,7 @@ class FormPost extends Component {
 FormPost = reduxForm({
   form: 'post',                      // the name of your form and the key to
                                         // where your form's state will be mounted
-  fields: ['title', 'author'],
+  fields: ['title', 'author', 'timestamp', 'body'],
 
 },state => ({
   initialValues: {
