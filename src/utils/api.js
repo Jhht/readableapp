@@ -64,3 +64,24 @@ export function createPostAPI( post ) {
 }
 
 
+
+export function editPostAPI( post ) {
+  const  keyPath = null
+	const urlA = 'http://localhost:3001/posts/' + post.id;
+
+	console.log('--- api fetch edit post ## ' + JSON.stringify(urlA));
+	console.log('--- api fetch edit post ## ' + JSON.stringify(post));
+
+  var headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('Authorization', 'whatever-you-want');
+  var init = {
+    method: 'PUT',
+    headers: headers
+  };
+  if (post) {
+    init.body = JSON.stringify(post)
+  }
+  return fetch(urlA, init).then((response) => response.json())
+}
+

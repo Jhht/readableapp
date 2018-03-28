@@ -1,90 +1,83 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import{createPost, getPostById} from '../../actions';
-import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
-import FormPost from './formPost'
-import { initialize } from 'redux-form';
+import{editPost} from '../../actions';
 
 
+class EditPost extends Component {
+ 
+  state = {
+    title: '',
+    body: '',
+  };
 
-class PostForm extends Component {
-
-
-  componentDidMount(){
-    if(this.props.match.params.postId != null){
-      this.props.getPostById(this.props.match.params.postId)
-      console.log('--->' + this.props.post)
-
-    }
-  }
-
-
-
-  // initialState, handlers
-  constructor(props){
-
+   constructor(props){
     super(props)
-    this.state = this.initialState;
-    this.handleChange = this.handleChange.bind(this);
+
+    const {post} = this.props;
+
+    console.log('### didMount ' + post.title);
+    var newState = {title: post.title, body: post.body};
+    console.log('### didMount newState ' + JSON.stringify(newState));
+
+    this.state  = (newState);
+    console.log('### didMount state ' + JSON.stringify(this.state));
+
     this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
 
-  // update state whenever input text is changed
-  handleChange(event) {
-    const {name, value} = event.target;
-    this.setState({ [name]: value });
-  }
+  onTitleChange = ({target}) => { 
+    console.log(' ### onTitleChange ' + JSON.stringify(this.state))
+    this.setState({title: target.value}
+  )}
 
-  // handle form submission
-  handleSubmit(event) {
+  onBodyChange = ({target}) => { 
+    console.log(' ### onBodyChange ' + JSON.stringify(this.state))
+    this.setState({body: target.value}
+  )}
+
+  handleSubmit(event){ 
+   
 
     this.editPost();
-    
-    // call onSubmit function (if available)
-    const {onSubmit} = this.props;
-    if (onSubmit) {
-      onSubmit();
+  }
+
+
+
+  editPost(){
+        console.log(' ### onTitleChange ' + JSON.stringify(this.props.post))
+
+    const {post, history} = this.props;
+        console.log(' ### onTitleChange ' + JSON.stringify(this.props.post))
+
+     const postUpdate = {//testing
+      id : post.id,
+      title : this.state.title,
+      body : this.state.body
     }
+    console.log(' ### onTitleChange postUpdate ' + JSON.stringify(postUpdate))
+
+    this.props.editPost(postUpdate).then(
+      history.push("/")
+    )
   }
 
-  // handle cancellation
-  handleCancel() {
-    const { history , post} = this.props;
-    history.push(`/`)
 
-  }
-
-  // create a new post
-  editPost() {
-    const { history , post} = this.props;
-
-    console.log('-----> editPost ' + JSON.stringify(this.state));
-   
-  }
-
+  
 
   render() {
 
-    
-    const {categories, post} = this.props;
-
-    let formDefaults
-
-    if(post != null){
-      console.log('## post ' + post.title)
-
-
-      
-    }else{
-
-    }
-
-    
+    console.log(' ### render ' + JSON.stringify(this.props))
 
     return (
-      <FormPost onSubmit={this.handleSubmit.bind(this)} post={post} initialValues={{'title': post.title, 'author': post.author, 'timestamp' : post.timestamp, 'body': post.body}}/>
+      <form onSubmit={this.handleSubmit} onCancel={this.handleCancel}>
+        <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.onTitleChange} />
+        <input type="text" name="body" placeholder="Body" value={this.state.body} onChange={this.onBodyChange} />
+        <input type="submit" value="Submit"/>
+        <input type="cancel" value="Cancel"/>
+      </form>
     )
   }
 }
@@ -92,4 +85,4 @@ class PostForm extends Component {
 const mapStateToProps = ({categories, post}) => ({ categories, post})
 
 
-export default connect(mapStateToProps, {createPost , getPostById})(PostForm)
+export default connect(mapStateToProps, {editPost })(EditPost)
