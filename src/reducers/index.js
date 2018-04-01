@@ -10,7 +10,11 @@ import {
     CREATE_POST,
     EDIT_POST,
     GET_POST_BY_ID,
-    POST_SORT_ORDER
+    POST_SORT_ORDER,
+    VOTE_POST,
+    GET_POST_COMMENTS,
+    CREATE_COMMENT,
+    EDIT_COMMENT
 } from '../actions'
 
 
@@ -37,18 +41,23 @@ function post (state = {}, action){
           ...state,
           ...action.post
         }
+      case VOTE_POST:
+        console.log(' reduccer VOTE_POST');
+        return{
+          ...state,
+          ...action.post
+        }
       default:
         return state
     }
 }
 
-function postOrder(state = '', action) {
+function postOrder(state = { sortBy : ''} , action) {
 
-    console.log(' --- reducer postOrder ' + state + ' ' + action.payload);
 
     switch (action.type) {
         case POST_SORT_ORDER:
-            return action.payload
+            return state.sortType.sortBy
         default:
             return state;
     }
@@ -84,4 +93,32 @@ function posts (state = {} , action){
   }
 }
 
-export default combineReducers({posts , categories, post, postOrder})
+function comments (state = [], action){
+
+  console.log(' --- reducer comments ' + JSON.stringify(state )+ ' ACTYION: ' + JSON.stringify(action ));
+
+
+  switch(action.type) {
+        case GET_POST_COMMENTS:
+            return {
+              ...state,
+              ...action.data
+            }
+        case CREATE_COMMENT:
+          return{
+              ...state,
+              [action.data.id]: action.data
+          }
+        case EDIT_COMMENT:
+         console.log('--- edit post reducer');
+             return {
+              ...state,
+              ...action.data
+            }
+        default : 
+          return state
+  }
+
+}
+
+export default combineReducers({posts , categories, post, postOrder, comments})

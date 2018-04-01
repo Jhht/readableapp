@@ -1,4 +1,8 @@
-import { fetchCategories , fetchAllPosts, fetchPostsByCategory, createPostAPI, fetchPostById, editPostAPI } from '../utils/api'
+import { fetchCategories 
+      , fetchAllPosts
+      , fetchPostsByCategory
+      , createPostAPI , editCommentAPI, fetchPostById, editPostAPI, votePostAPI, fetchPostComments
+      , createCommentAPI } from '../utils/api'
 import api from '../utils/api'
 
 export const GET_POSTS = 'GET_POSTS'
@@ -9,6 +13,9 @@ export const CREATE_POST = 'CREATE_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const POST_SORT_ORDER = 'POST_SORT_ORDER'
+export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
+export const CREATE_COMMENT = 'CREATE_COMMENT'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 
 
 
@@ -89,18 +96,65 @@ export const editPost = ( post ) => dispatch => (
           })
 )
 
-export function voteForPost(id, vote) {
-    
-}
+export const voteForPost = (post, vote) => dispatch => (
+     votePostAPI( post, vote )
+     .then(
+      data => {
+            console.log('api posts votePost ' + JSON.stringify(data))
+            dispatch({
+              type: VOTE_POST,
+              data           
+            })
+          })
+)
 
 export function postSortOrder(sortType) {
 
     return {
         type: POST_SORT_ORDER,
-        payload: sortType
+        sortType
     }
 }
 
+
+//---- comments actions ----
+
+export const getPostComments = (postId) => dispatch => (
+  fetchPostComments( postId)
+  .then(
+      data => {
+            console.log('api posts getPostComments ' + JSON.stringify(data))
+            dispatch({
+              type: GET_POST_COMMENTS,
+              data           
+            })
+          })
+
+)
+
+export const createComment = ( comment ) => dispatch => (
+  createCommentAPI( comment )
+     .then(
+      data => {
+            console.log('api comment create' + JSON.stringify(data))
+            dispatch({
+              type: CREATE_COMMENT,
+              data           
+            })
+          })
+)
+
+export const editComment = ( comment ) => dispatch => (
+  editCommentAPI( comment )
+     .then(
+      data => {
+            console.log('api comment edit' + JSON.stringify(data))
+            dispatch({
+              type: EDIT_COMMENT,
+              data           
+            })
+          })
+)
 
 
 
