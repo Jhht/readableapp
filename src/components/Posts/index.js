@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getPosts, getPostsByCategory, postSortOrder , voteForPost} from '../../actions'
+import { getPosts, getPostsByCategory, postSortOrder , voteForPost, deletePost} from '../../actions'
 import { connect } from 'react-redux'
 import {arrayFromObject } from '../../utils/helpers'
 import { Link } from 'react-router-dom'
@@ -14,7 +14,6 @@ class Posts extends Component{
      if(this.props.match != null){
         const { category } = this.props.match.params;
         
-        console.log('## DidUpdate ReadableIndex category ' + category);
         
         if( category != null){
           this.props.getPostsByCategory(category);
@@ -26,33 +25,44 @@ class Posts extends Component{
       }
   }
 
- onPostOrderChange = ({target}) => { 
-    this.props.postSortOrder(target.value);
-  }
 
   render(){
 
-    const { posts, match, sortPostsBy, voteForPost} = this.props
 
-    const orderedPosts = _.sortBy(posts, this.props.postsOrder).reverse()
+    const { posts, match, sortPostsBy, voteForPost, postOrder, deletePost} = this.props
+
+    const filteredPosts = Object.values(posts).filter(post => !post.deleted );
+
+     filteredPosts.sort(function(a, b) {
+        if (postOrder === 'timestamp') {
+          return (a.timestamp > b.timestamp)
+            ? -1
+            : 1
+        } else {
+          return (a.voteScore > b.voteScore)
+            ? -1
+            : 1
+        }
+      })
+
 
    //console.log('   this post ' + JSON.stringify(postArray))
-   console.log(' ---- RENDER POST ' + JSON.stringify(orderedPosts))
 
     return(
       <div className="Posts">
-            <h1> Posts render </h1>
+            <h1> Posts </h1>
              <select onChange={(event) => this.props.postSortOrder({sortBy : event.target.value})}>
                     <option value='voteScore'>Votes</option>
                     <option value='timestamp'>Date</option>
                   </select>
             <ol >
-              {orderedPosts.map((post) =>(
+              {filteredPosts.map((post) =>(
                  <li key={post.id}>
                     <p>{post.title} Votes: {post.voteScore} -- 
                         <Button onClick={() => voteForPost(post, 'upVote')}  > + </Button>
                         <Button onClick={() => voteForPost(post, 'downVote')} > - </Button>
-                        <Link to={`/${post.category}/${post.id}`}>Detail</Link>
+                        <Button onClick={() => deletePost(post.id)} > Del </Button>
+                       <Link to={`/${post.category}/${post.id}`}>Detail</Link>
                     </p>
                  </li>
               ))}
@@ -62,11 +72,7 @@ class Posts extends Component{
   }
 }
 
-function mapStateToProps(state) {
-    const posts = state.posts
-    const { postsOrder } = state;
-    return { posts, postsOrder }
-}
+const mapStateToProps = ({ postOrder, posts}) => ({ postOrder,posts})
 
  
-export default connect(mapStateToProps, { getPosts, getPostsByCategory, postSortOrder, voteForPost })(Posts)
+export default connect(mapStateToProps, { getPosts, getPostsByCategory, postSortOrder, voteForPost, deletePost })(Posts)

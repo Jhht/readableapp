@@ -2,7 +2,9 @@ import { fetchCategories
       , fetchAllPosts
       , fetchPostsByCategory
       , createPostAPI , editCommentAPI, fetchPostById, editPostAPI, votePostAPI, fetchPostComments
-      , createCommentAPI } from '../utils/api'
+      , createCommentAPI,
+      deletePostAPI ,voteCommentAPI, 
+    deleteCommentAPI} from '../utils/api'
 import api from '../utils/api'
 
 export const GET_POSTS = 'GET_POSTS'
@@ -16,6 +18,9 @@ export const POST_SORT_ORDER = 'POST_SORT_ORDER'
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
 export const CREATE_COMMENT = 'CREATE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
+export const DELETE_POST = 'DELETE_POST'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
+export const VOTE_COMMENT = 'VOTE_COMMENT'
 
 
 
@@ -25,7 +30,6 @@ export const getAllCategories = () => dispatch => (
   fetchCategories().
     then(
       categories => {
-        console.log('api categories ' + categories)
             dispatch({
               type: GET_CATEGORIES,
               categories           
@@ -40,7 +44,6 @@ export const getPosts = () => dispatch => (
   fetchAllPosts()
     .then(
       posts => {
-            console.log('api posts ' + posts)
             dispatch({
               type: GET_POSTS,
               posts           
@@ -76,7 +79,6 @@ export const createPost = ( post ) => dispatch => (
   createPostAPI( post )
      .then(
       data => {
-            console.log('api posts create' + JSON.stringify(data))
             dispatch({
               type: CREATE_POST,
               data           
@@ -88,9 +90,20 @@ export const editPost = ( post ) => dispatch => (
   editPostAPI( post )
      .then(
       data => {
-            console.log('api posts create' + JSON.stringify(data))
+            console.log('api posts edit' + JSON.stringify(data))
             dispatch({
               type: EDIT_POST,
+              data           
+            })
+          })
+)
+
+export const deletePost = ( id ) => dispatch => (
+  deletePostAPI( id )
+     .then(
+      data => {
+            dispatch({
+              type: DELETE_POST,
               data           
             })
           })
@@ -100,7 +113,6 @@ export const voteForPost = (post, vote) => dispatch => (
      votePostAPI( post, vote )
      .then(
       data => {
-            console.log('api posts votePost ' + JSON.stringify(data))
             dispatch({
               type: VOTE_POST,
               data           
@@ -123,7 +135,6 @@ export const getPostComments = (postId) => dispatch => (
   fetchPostComments( postId)
   .then(
       data => {
-            console.log('api posts getPostComments ' + JSON.stringify(data))
             dispatch({
               type: GET_POST_COMMENTS,
               data           
@@ -136,7 +147,6 @@ export const createComment = ( comment ) => dispatch => (
   createCommentAPI( comment )
      .then(
       data => {
-            console.log('api comment create' + JSON.stringify(data))
             dispatch({
               type: CREATE_COMMENT,
               data           
@@ -148,7 +158,6 @@ export const editComment = ( comment ) => dispatch => (
   editCommentAPI( comment )
      .then(
       data => {
-            console.log('api comment edit' + JSON.stringify(data))
             dispatch({
               type: EDIT_COMMENT,
               data           
@@ -158,20 +167,24 @@ export const editComment = ( comment ) => dispatch => (
 
 
 
+export const deleteComment = ( id ) => dispatch => (
+  deleteCommentAPI( id )
+     .then(
+      data => {
+            dispatch({
+              type: DELETE_COMMENT,
+              data           
+            })
+          })
+)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const voteForComment = (comment, vote) => dispatch => (
+     voteCommentAPI( comment, vote )
+     .then(
+      data => {
+            dispatch({
+              type: VOTE_COMMENT,
+              data           
+            })
+          })
+)

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import{editPost} from '../../actions';
+import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
+
 
 
 class EditPost extends Component {
@@ -76,7 +78,7 @@ class EditPost extends Component {
         <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.onTitleChange} />
         <input type="text" name="body" placeholder="Body" value={this.state.body} onChange={this.onBodyChange} />
         <input type="submit" value="Submit"/>
-        <input type="cancel" value="Cancel"/>
+        <input type="button" value="Cancel"/>
       </form>
     )
   }

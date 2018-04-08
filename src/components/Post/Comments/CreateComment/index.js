@@ -8,6 +8,7 @@ import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-b
 class CreateComment extends Component {
  
   initialState = {
+    id : '',
     author: '',
     body: '',
   };
@@ -24,7 +25,7 @@ class CreateComment extends Component {
     const { defaults , toggleEdit} = this.props;
 
     if(defaults){
-      var newState = {author: defaults.author, body: defaults.body};
+      var newState = {id : defaults.id, author: defaults.author, body: defaults.body};
       console.log('### didMount newState ' + JSON.stringify(toggleEdit));
 
       this.state  = (newState);
@@ -59,25 +60,32 @@ class CreateComment extends Component {
 
   // create a new post
   createComment() {
-    const {author, body, edit} = this.state;
+    const {author, body, edit, id} = this.state;
     const { history, post, toggleEdit } = this.props;
 
     console.log(' creating comment with post --- ' + post.id)
 
-    const comment = {//testing
-      id : guid(),
-      author : author,
-      body : body,
-      timestamp : Date.now,
-      parentId : post.id
-    }
+   
 
     if(toggleEdit){
-      console.log('## editing comment')
-      this.props.editComment( comment )
-
+       const commentUpdate = {//testing
+          id : id,
+          author : author,
+          body : body,
+          timestamp : Date.now(),      
+          parentId : post.id,
+      }
+      console.log('## editing comment ' + JSON.stringify(this.props))
+      this.props.editComment( commentUpdate )
     }else{
-      this.props.createComment( comment )
+      const commentCreate = {//testing
+          id : guid(),
+          author : author,
+          body : body,
+          timestamp : Date.now(),      
+          parentId : post.id,
+      }
+      this.props.createComment( commentCreate )
     }
 
   }

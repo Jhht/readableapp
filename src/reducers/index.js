@@ -1,6 +1,6 @@
-
+import _  from 'lodash'
 import {combineReducers} from 'redux'
-import {objectFromArray} from '../utils/helpers'
+import {objectFromArray , arrayFromObject} from '../utils/helpers'
 
 
 import {
@@ -14,7 +14,9 @@ import {
     VOTE_POST,
     GET_POST_COMMENTS,
     CREATE_COMMENT,
-    EDIT_COMMENT
+    EDIT_COMMENT, 
+    DELETE_POST,
+    VOTE_COMMENT
 } from '../actions'
 
 
@@ -27,7 +29,6 @@ function categories (state = [], action){
 
               return action.categories
         default : 
-        console.log('reducer default')
         return state
     }
 }
@@ -38,26 +39,20 @@ function post (state = {}, action){
     switch(action.type){
       case GET_POST_BY_ID:
         return{
-          ...state,
           ...action.post
         }
-      case VOTE_POST:
-        console.log(' reduccer VOTE_POST');
-        return{
-          ...state,
-          ...action.post
-        }
+     
+ 
       default:
         return state
     }
 }
 
-function postOrder(state = { sortBy : ''} , action) {
-
-
+function postOrder(state = { sortBy : 'voteScore'} , action) {
+ 
     switch (action.type) {
         case POST_SORT_ORDER:
-            return state.sortType.sortBy
+            return action.sortType.sortBy
         default:
             return state;
     }
@@ -68,13 +63,13 @@ function posts (state = {} , action){
 
   switch(action.type) {
          case CREATE_POST:
-          console.log('--- create post reducer');
           return {
+            ...state,
             ... action.posts
           };
 
          case EDIT_POST:
-           console.log('--- edit post reducer');
+           console.log('--- edit post reducer ' + JSON.stringify(state) + ' ' + JSON.stringify(action));
               return {
               ... action.posts
             }
@@ -88,6 +83,22 @@ function posts (state = {} , action){
             return {
               ... action.posts
             }
+         case DELETE_POST:
+            return {
+              ... action.posts
+            }
+
+        case VOTE_POST:
+
+          const arrayState = arrayFromObject(  state);
+
+          const voteIndex = _.findIndex(arrayState,o=>o.id === action.data.id);
+
+
+           return{
+            ...state,
+            [voteIndex]: action.data
+          }
         default : 
           return state
   }
@@ -95,26 +106,40 @@ function posts (state = {} , action){
 
 function comments (state = [], action){
 
-  console.log(' --- reducer comments ' + JSON.stringify(state )+ ' ACTYION: ' + JSON.stringify(action ));
 
+  const arrayState = arrayFromObject(  state);
 
   switch(action.type) {
+
         case GET_POST_COMMENTS:
             return {
               ...state,
               ...action.data
             }
         case CREATE_COMMENT:
+
+          arrayState.push(action.data)
           return{
-              ...state,
-              [action.data.id]: action.data
+              ...arrayState
           }
         case EDIT_COMMENT:
-         console.log('--- edit post reducer');
-             return {
-              ...state,
-              ...action.data
-            }
+          console.log('--- edit comment reducer');
+           
+           const voteIndexEdit = _.findIndex(arrayState,o=>o.id === action.data.id);
+
+          
+               return{
+                ...state,
+                [voteIndexEdit]: action.data
+              }
+        case VOTE_COMMENT:
+
+           const voteIndex = _.findIndex(arrayState,o=>o.id === action.data.id);
+
+           return{
+            ...state,
+            [voteIndex]: action.data
+          }
         default : 
           return state
   }

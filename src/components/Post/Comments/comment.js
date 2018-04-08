@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getPostById , getPostComments} from '../../../actions'
+import { getPostById , getPostComments, voteForComment} from '../../../actions'
 import { Button } from 'react-bootstrap'
 import CreateComment from './CreateComment'
 
@@ -19,15 +19,16 @@ class Comment extends Component {
 
 	render(){
 		const { edit } = this.state
-		const {comment} = this.props;
-		console.log(' ## render comment ' + comment);
+		const {comment , voteForComment, history} = this.props;
+		console.log(' ## render comment ' + JSON.stringify(this.props));
 			 
 			if (edit) {
 			      return (
 			        <CreateComment 
 			          toggleEdit={{edit : this.state.edit}}
 			          commentId={comment.id}
-			          defaults={{body: comment.body, author: comment.author}}
+			          defaults={{id : comment.id, body: comment.body, author: comment.author}}
+			          history={this.props.history}
 			        />
 			      )
 			}else{
@@ -36,13 +37,15 @@ class Comment extends Component {
 					<div key={comment.id}> 
 						<p>Author: {comment.author}</p>
 						<p>Body: {comment.body}</p>
+						<p>Votes: {comment.voteScore}</p>
 						<Button onClick={() => this.toggleEdit()} > Edit </Button>
-
+   						<Button onClick={() => voteForComment(comment, 'upVote')}  > + </Button>
+                        <Button onClick={() => voteForComment(comment, 'downVote')} > - </Button>
 					</div>);
 			}	
 	}
 }
 
-const mapStateToProps = ({ post}) => ({ post})
+const mapStateToProps = ({ post, comments}) => ({ post, comments})
 
-export default connect(mapStateToProps )(Comment)
+export default connect(mapStateToProps, {voteForComment} )(Comment)
