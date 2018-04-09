@@ -5,40 +5,15 @@ import { fetchCategories
       , createCommentAPI,
       deletePostAPI ,voteCommentAPI, 
     deleteCommentAPI} from '../utils/api'
-import api from '../utils/api'
 
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POSTS_BY_CAT = 'GET_POSTS_BY_CAT'
 export const GET_POST_BY_ID = 'GET_POST_BY_ID'
-export const GET_CATEGORIES = 'GET_CATEGORIES'
 export const CREATE_POST = 'CREATE_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const POST_SORT_ORDER = 'POST_SORT_ORDER'
-export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
-export const CREATE_COMMENT = 'CREATE_COMMENT'
-export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_POST = 'DELETE_POST'
-export const DELETE_COMMENT = 'DELETE_COMMENT'
-export const VOTE_COMMENT = 'VOTE_COMMENT'
-
-
-
-//--------- Category actions
-
-export const getAllCategories = () => dispatch => (
-  fetchCategories().
-    then(
-      categories => {
-            dispatch({
-              type: GET_CATEGORIES,
-              categories           
-            })
-      })
-)
-
-//-------- Posts actions
-
 
 export const getPosts = () => dispatch => (
   fetchAllPosts()
@@ -127,64 +102,3 @@ export function postSortOrder(sortType) {
         sortType
     }
 }
-
-
-//---- comments actions ----
-
-export const getPostComments = (postId) => dispatch => (
-  fetchPostComments( postId)
-  .then(
-      data => {
-            dispatch({
-              type: GET_POST_COMMENTS,
-              data           
-            })
-          })
-
-)
-
-export const createComment = ( comment ) => dispatch => (
-  createCommentAPI( comment )
-     .then(
-      data => {
-            dispatch({
-              type: CREATE_COMMENT,
-              data           
-            })
-          })
-)
-
-export const editComment = ( comment ) => dispatch => (
-  editCommentAPI( comment )
-     .then(
-      data => {
-            dispatch({
-              type: EDIT_COMMENT,
-              data           
-            })
-          })
-)
-
-
-
-export const deleteComment = ( id ) => dispatch => (
-  deleteCommentAPI( id )
-     .then(
-      data => {
-            dispatch({
-              type: DELETE_COMMENT,
-              data           
-            })
-          })
-)
-
-export const voteForComment = (comment, vote) => dispatch => (
-     voteCommentAPI( comment, vote )
-     .then(
-      data => {
-            dispatch({
-              type: VOTE_COMMENT,
-              data           
-            })
-          })
-)

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getPosts, getAllCategories, getPostsByCategory } from '../actions'
+import {getPosts, getPostsByCategory } from '../actions/post'
+import {getAllCategories } from '../actions/category'
 import Posts from './Posts'
 import Categories from './Categories'
 

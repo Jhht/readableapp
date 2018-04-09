@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { fetchCategories , fetchAllPosts} from '../utils/api'
 import Categories from './Categories'
 import Posts from './Posts'
 import Post from './Post'

@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import{createPost} from '../../actions';
+import{createPost} from '../../actions/post';
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
+
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
 
 
@@ -58,11 +61,12 @@ class PostForm extends Component {
     const {author, category, title, body} = this.state;
     const { history } = this.props;
 
+    console.log(' --- create cat ' + category)
 
     const post = {//testing
       id : guid(),
       author : author,
-      category : 'udacity',
+      category : category,
       title : title,
       body : body,
       timestamp : Date.now()
@@ -79,6 +83,7 @@ class PostForm extends Component {
     const {author, category, title, body} = this.state
     const {categories} = this.props;
 
+    console.log(' --- ' + JSON.stringify(categories))
     return (
       <form onSubmit={this.handleSubmit}>
         <FormGroup controlId="postAuthor">
@@ -88,6 +93,21 @@ class PostForm extends Component {
         <FormGroup controlId="postTitle">
           <ControlLabel>Title</ControlLabel>
           <FormControl type="text" name="title" placeholder="Title" value={title} onChange={this.handleChange}/>
+        </FormGroup>
+        <FormGroup>
+        <select
+              name='category'
+              placeholder='Category'
+              onChange={this.handleChange}
+              className='ui selection dropdown'>
+             { 
+               categories.map( category => {
+                  return(
+                    <option key={category.path} value={category.name}>{category.name}</option>
+                  )
+                })
+              }
+          </select>
         </FormGroup>
         <FormGroup controlId="postBody">
           <ControlLabel>Body</ControlLabel>
@@ -112,4 +132,8 @@ const mapStateToProps = ({categories, posts}) => ({ categories, posts})
 const mapDispatchToProps = {createPost}
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter
+)
+export default enhance(PostForm)

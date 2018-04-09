@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import{editPost} from '../../actions';
+import{editPost} from '../../actions/post';
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
 
 
@@ -11,6 +11,7 @@ class EditPost extends Component {
   state = {
     title: '',
     body: '',
+    category : ''
   };
 
    constructor(props){
@@ -19,13 +20,14 @@ class EditPost extends Component {
     const {post} = this.props;
 
     console.log('### didMount ' + post.title);
-    var newState = {title: post.title, body: post.body};
+    var newState = {title: post.title, body: post.body, category : post.category};
     console.log('### didMount newState ' + JSON.stringify(newState));
 
     this.state  = (newState);
     console.log('### didMount state ' + JSON.stringify(this.state));
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
   }
 
@@ -35,10 +37,12 @@ class EditPost extends Component {
     this.setState({title: target.value}
   )}
 
-  onBodyChange = ({target}) => { 
-    console.log(' ### onBodyChange ' + JSON.stringify(this.state))
-    this.setState({body: target.value}
-  )}
+   // update state whenever input text is changed
+  handleChange(event) {
+    const {name, value} = event.target;
+
+    this.setState({ [name]: value });
+  }
 
   handleSubmit(event){ 
    
@@ -57,7 +61,8 @@ class EditPost extends Component {
      const postUpdate = {//testing
       id : post.id,
       title : this.state.title,
-      body : this.state.body
+      body : this.state.body,
+      category : this.state.category
     }
     console.log(' ### onTitleChange postUpdate ' + JSON.stringify(postUpdate))
 
@@ -71,14 +76,38 @@ class EditPost extends Component {
 
   render() {
 
+    const {category } = this.state
+    const { categories } = this.props
+
     console.log(' ### render ' + JSON.stringify(this.props))
 
     return (
-      <form onSubmit={this.handleSubmit} onCancel={this.handleCancel}>
-        <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.onTitleChange} />
-        <input type="text" name="body" placeholder="Body" value={this.state.body} onChange={this.onBodyChange} />
-        <input type="submit" value="Submit"/>
-        <input type="button" value="Cancel"/>
+      <form onSubmit={this.handleSubmit}>
+        <FormGroup controlId="postTitle">
+          <ControlLabel>Title</ControlLabel>
+          <FormControl type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>
+        </FormGroup>
+        <FormGroup>
+        <select
+              name='category'
+              value={category}
+              placeholder='Category'
+              onChange={this.handleChange}
+              className='ui selection dropdown'>
+             { 
+               categories.map( category => {
+                  return(
+                    <option key={category.path} value={category.name}>{category.name}</option>
+                  )
+                })
+              }
+          </select>
+        </FormGroup>
+        <FormGroup controlId="postBody">
+          <ControlLabel>Body</ControlLabel>
+          <FormControl componentClass="textarea" name="body" placeholder="Body" value={this.state.body} onChange={this.handleChange}/>
+        </FormGroup>
+        <Button bsStyle="primary" type="submit" >Create Post</Button>
       </form>
     )
   }

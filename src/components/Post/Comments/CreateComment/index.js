@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import{createComment , editComment} from '../../../../actions';
+import {connect , withRouter} from 'react-redux';
+import{createComment , editComment} from '../../../../actions/comment';
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
 
 
@@ -63,7 +63,7 @@ class CreateComment extends Component {
     const {author, body, edit, id} = this.state;
     const { history, post, toggleEdit } = this.props;
 
-    console.log(' creating comment with post --- ' + post.id)
+    console.log(' creating comment with post --- ' + this.props.location)
 
    
 

@@ -23,7 +23,7 @@ class Comments extends Component {
 	    	<div>
 		     	<h3> Comments </h3>
 		        {commentCount === 0 && (
-		          <div>No comments yet. Be the first, add one below :)</div>
+		          <div>No comments yet.</div>
 		        )} 
 	    	<ol>
 	    		{orderComments.map((comment) => (
@@ -31,7 +31,7 @@ class Comments extends Component {
          			<Comment key={comment.id} comment={comment} />
          			</li>
         		))}	  
-        		< CreateComment post={post} />   
+        		< CreateComment post={post} history = {this.props.history}/>   
         	</ol>  
 	        </div>
 	    )

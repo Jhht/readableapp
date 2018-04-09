@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import  Comments  from './Comments'
-import { getPostById , getPostComments} from '../../actions'
+import { getPostById  } from '../../actions/post'
+import { getPostComments} from '../../actions/comment'
 
 
 class Post extends Component {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getPosts, getPostsByCategory, postSortOrder , voteForPost, deletePost} from '../../actions'
+import { getPosts, postSortOrder , voteForPost, deletePost} from '../../actions/post'
+import { getPostsByCategory} from '../../actions/post'
 import { connect } from 'react-redux'
 import {arrayFromObject } from '../../utils/helpers'
 import { Link } from 'react-router-dom'
