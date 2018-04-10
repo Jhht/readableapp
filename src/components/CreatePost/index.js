@@ -25,6 +25,7 @@ class PostForm extends Component {
     this.state = this.initialState;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
 
@@ -50,10 +51,8 @@ class PostForm extends Component {
   // handle cancellation
   handleCancel() {
     // call onCancel function (if available)
-    const {onCancel} = this.props;
-    if (onCancel) {
-      onCancel();
-    }
+    const {history} = this.props;
+    history.push('/');
   }
 
   // create a new post
@@ -61,7 +60,6 @@ class PostForm extends Component {
     const {author, category, title, body} = this.state;
     const { history } = this.props;
 
-    console.log(' --- create cat ' + category)
 
     const post = {//testing
       id : guid(),
@@ -83,7 +81,6 @@ class PostForm extends Component {
     const {author, category, title, body} = this.state
     const {categories} = this.props;
 
-    console.log(' --- ' + JSON.stringify(categories))
     return (
       <form onSubmit={this.handleSubmit}>
         <FormGroup controlId="postAuthor">
@@ -91,10 +88,11 @@ class PostForm extends Component {
           <FormControl type="text" name="author" placeholder="Author Name" value={author} onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup controlId="postTitle">
-          <ControlLabel>Title</ControlLabel>
+          <ControlLabel>Title: </ControlLabel>
           <FormControl type="text" name="title" placeholder="Title" value={title} onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup>
+        <ControlLabel>Category: </ControlLabel>
         <select
               name='category'
               placeholder='Category'
@@ -110,10 +108,12 @@ class PostForm extends Component {
           </select>
         </FormGroup>
         <FormGroup controlId="postBody">
-          <ControlLabel>Body</ControlLabel>
+          <ControlLabel>Text: </ControlLabel>
           <FormControl componentClass="textarea" name="body" placeholder="Body" value={body} onChange={this.handleChange}/>
         </FormGroup>
         <Button bsStyle="primary" type="submit" >Create Post</Button>
+        <Button bsStyle="primary" type="submit" onClick={this.handleCancel}>Cancel</Button>
+
       </form>
     )
   }

@@ -32,7 +32,16 @@ class Posts extends Component{
 
     const { posts, match, sortPostsBy, voteForPost, postOrder, deletePost} = this.props
 
-    const filteredPosts = Object.values(posts).filter(post => !post.deleted );
+
+    const postsArray = arrayFromObject(posts)
+
+        console.log('POST _> ' + JSON.stringify(posts))
+
+
+    const filteredPosts = postsArray.filter(post => !post.deleted );
+
+    console.log('POST _> filtered' + JSON .stringify(postsArray))
+
 
      filteredPosts.sort(function(a, b) {
         if (postOrder === 'timestamp') {

@@ -21,15 +21,15 @@ class CreateComment extends Component {
     this.state = this.initialState;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+
 
     const { defaults , toggleEdit} = this.props;
 
     if(defaults){
       var newState = {id : defaults.id, author: defaults.author, body: defaults.body};
-      console.log('### didMount newState ' + JSON.stringify(toggleEdit));
 
       this.state  = (newState);
-      console.log('### didMount state ' + JSON.stringify(this.state));
     }
   }
 
@@ -43,7 +43,6 @@ class CreateComment extends Component {
   // handle form submission
   handleSubmit(event) {
     event.preventDefault();
-    console.log('handle submit comment')
     this.createComment();
     
 
@@ -51,19 +50,14 @@ class CreateComment extends Component {
 
   // handle cancellation
   handleCancel() {
-    // call onCancel function (if available)
-    const {onCancel} = this.props;
-    if (onCancel) {
-      onCancel();
-    }
+    this.props.toggleEdit()
+
   }
 
   // create a new post
   createComment() {
     const {author, body, edit, id} = this.state;
     const { history, post, toggleEdit } = this.props;
-
-    console.log(' creating comment with post --- ' + this.props.location)
 
    
 
@@ -75,7 +69,6 @@ class CreateComment extends Component {
           timestamp : Date.now(),      
           parentId : post.id,
       }
-      console.log('## editing comment ' + JSON.stringify(this.props))
       this.props.editComment( commentUpdate )
     }else{
       const commentCreate = {//testing
@@ -93,7 +86,16 @@ class CreateComment extends Component {
 
   render() {
     const {author, body} = this.state
-    const {comment} = this.props;
+    const {comment, toggleEdit} = this.props;
+
+    const button = toggleEdit ? (
+      <div>
+        <Button bsStyle="primary" type="submit" >Save</Button>
+        <Button bsStyle="primary" type="button" onClick={this.handleCancel}>Cancel</Button>
+      </div>
+      ) : (
+        <Button bsStyle="primary" type="submit" >Save</Button>
+      )
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -106,8 +108,7 @@ class CreateComment extends Component {
           <ControlLabel>Body</ControlLabel>
           <FormControl componentClass="textarea" name="body" placeholder="Body" value={body} onChange={this.handleChange}/>
         </FormGroup>
-        <Button bsStyle="primary" type="submit" >Save</Button>
-        <Button bsStyle="primary" type="button" >Cancel</Button>
+        {button}          
       </form>
     )
   }

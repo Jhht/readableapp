@@ -8,7 +8,8 @@ import {
     CREATE_COMMENT,
     EDIT_COMMENT, 
     DELETE_POST,
-    VOTE_COMMENT
+    VOTE_COMMENT,
+    DELETE_COMMENT
 } from '../actions/comment'
 
 function comments (state = [], action){
@@ -47,6 +48,8 @@ function comments (state = [], action){
             ...state,
             [voteIndex]: action.data
           }
+        case DELETE_COMMENT:
+            return arrayState.filter(comment => comment.id !== action.data.id)
         default : 
           return state
   }

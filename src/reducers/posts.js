@@ -14,10 +14,11 @@ import {
     DELETE_POST
 } from '../actions/post'
 
-function posts (state = {} , action){
+function posts (state = { } , action){
 
 
   switch(action.type) {
+
          case CREATE_POST:
           return {
             ...state,
@@ -40,10 +41,15 @@ function posts (state = {} , action){
               ... action.posts
             }
          case DELETE_POST:
-            return {
-              ... action.posts
-            }
+          const arrayStateDel = arrayFromObject(  state);
+          console.log('--- delete post arrayStateDel ' + JSON.stringify(arrayStateDel) + ' ' + JSON.stringify(action));
+          const delIndex = _.findIndex(arrayStateDel,o=>o.id === action.data.id);
 
+
+           return{
+            ...state,
+            [delIndex]: action.data
+          }
         case VOTE_POST:
 
           const arrayState = arrayFromObject(  state);

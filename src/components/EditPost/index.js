@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import{editPost} from '../../actions/post';
 import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
-
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
 
 
 class EditPost extends Component {
@@ -19,44 +20,39 @@ class EditPost extends Component {
 
     const {post} = this.props;
 
-    console.log('### didMount ' + post.title);
     var newState = {title: post.title, body: post.body, category : post.category};
-    console.log('### didMount newState ' + JSON.stringify(newState));
 
     this.state  = (newState);
-    console.log('### didMount state ' + JSON.stringify(this.state));
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
 
   }
 
-
-  onTitleChange = ({target}) => { 
-    console.log(' ### onTitleChange ' + JSON.stringify(this.state))
-    this.setState({title: target.value}
-  )}
 
    // update state whenever input text is changed
   handleChange(event) {
     const {name, value} = event.target;
-
     this.setState({ [name]: value });
   }
 
-  handleSubmit(event){ 
-   
 
+  handleSubmit(event){ 
     this.editPost();
   }
 
+  // handle cancellation
+  handleCancel() {
+    // call onCancel function (if available)
+    const {history} = this.props;
+    history.push('/');
+  }
 
 
   editPost(){
-        console.log(' ### onTitleChange ' + JSON.stringify(this.props.post))
 
-    const {post, history} = this.props;
-        console.log(' ### onTitleChange ' + JSON.stringify(this.props.post))
+      const {post, history} = this.props;
 
      const postUpdate = {//testing
       id : post.id,
@@ -64,7 +60,6 @@ class EditPost extends Component {
       body : this.state.body,
       category : this.state.category
     }
-    console.log(' ### onTitleChange postUpdate ' + JSON.stringify(postUpdate))
 
     this.props.editPost(postUpdate).then(
       history.push("/")
@@ -79,15 +74,16 @@ class EditPost extends Component {
     const {category } = this.state
     const { categories } = this.props
 
-    console.log(' ### render ' + JSON.stringify(this.props))
 
     return (
       <form onSubmit={this.handleSubmit}>
         <FormGroup controlId="postTitle">
-          <ControlLabel>Title</ControlLabel>
+          <ControlLabel>Title: </ControlLabel>
           <FormControl type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup>
+        <ControlLabel>Category: </ControlLabel>
+
         <select
               name='category'
               value={category}
@@ -104,10 +100,11 @@ class EditPost extends Component {
           </select>
         </FormGroup>
         <FormGroup controlId="postBody">
-          <ControlLabel>Body</ControlLabel>
+          <ControlLabel>Text: </ControlLabel>
           <FormControl componentClass="textarea" name="body" placeholder="Body" value={this.state.body} onChange={this.handleChange}/>
         </FormGroup>
         <Button bsStyle="primary" type="submit" >Create Post</Button>
+        <Button bsStyle="primary" type="button" onClick={this.handleCancel}>Cancel</Button>        
       </form>
     )
   }
@@ -116,4 +113,8 @@ class EditPost extends Component {
 const mapStateToProps = ({categories, post}) => ({ categories, post})
 
 
-export default connect(mapStateToProps, {editPost })(EditPost)
+const enhance = compose(
+  connect(mapStateToProps, { editPost }),
+  withRouter
+)
+export default enhance(EditPost)
