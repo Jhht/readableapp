@@ -1,15 +1,11 @@
-import { fetchCategories 
-      , fetchAllPosts
-      , fetchPostsByCategory
-      , createPostAPI , editCommentAPI, fetchPostById, editPostAPI, votePostAPI, fetchPostComments
-      , createCommentAPI,
-      deletePostAPI ,voteCommentAPI, 
+import {
+    editCommentAPI, fetchPostComments, 
+    createCommentAPI,
+    voteCommentAPI, 
     deleteCommentAPI} from '../utils/api'
-
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
 export const CREATE_COMMENT = 'CREATE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const DELETE_POST = 'DELETE_POST'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 

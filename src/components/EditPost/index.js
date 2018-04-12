@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import{editPost} from '../../actions/post';
-import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
+import{editPost, getPostById} from '../../actions/post';
+import {FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom'
 import {compose} from 'recompose'
+import {arrayFromObject} from '../../utils/helpers'
+import { Link } from 'react-router-dom'
 
 
 class EditPost extends Component {
  
   state = {
+    id: '',
     title: '',
     body: '',
     category : ''
@@ -18,9 +20,19 @@ class EditPost extends Component {
    constructor(props){
     super(props)
 
-    const {post} = this.props;
+    const postsArray = arrayFromObject(this.props.posts)
+    let {post} = this.props
+    let postFilteredArray;
+   
+    if(postsArray.length > 0){
+      postFilteredArray = postsArray.filter(post => this.props.match.params.postId === post.id );
+      post = postFilteredArray[0]
+    }
+    
+    console.log('post vale ' + JSON.stringify(post))     
+    
 
-    var newState = {title: post.title, body: post.body, category : post.category};
+    var newState = {id: post.id, title: post.title, body: post.body, category : post.category};
 
     this.state  = (newState);
 
@@ -52,10 +64,10 @@ class EditPost extends Component {
 
   editPost(){
 
-      const {post, history} = this.props;
+    const {history} = this.props;
 
      const postUpdate = {//testing
-      id : post.id,
+      id : this.state.id,
       title : this.state.title,
       body : this.state.body,
       category : this.state.category
@@ -64,10 +76,7 @@ class EditPost extends Component {
     this.props.editPost(postUpdate).then(
       history.push("/")
     )
-  }
-
-
-  
+  } 
 
   render() {
 
@@ -104,17 +113,18 @@ class EditPost extends Component {
           <FormControl componentClass="textarea" name="body" placeholder="Body" value={this.state.body} onChange={this.handleChange}/>
         </FormGroup>
         <Button bsStyle="primary" type="submit" >Create Post</Button>
-        <Button bsStyle="primary" type="button" onClick={this.handleCancel}>Cancel</Button>        
+        <Button bsStyle="primary" type="button" onClick={this.handleCancel}>Cancel</Button>
+         <Link to={'/'}>Back to all post </Link>
       </form>
     )
   }
 }
 
-const mapStateToProps = ({categories, post}) => ({ categories, post})
+const mapStateToProps = ({categories, post, posts}) => ({ categories, post, posts})
 
 
 const enhance = compose(
-  connect(mapStateToProps, { editPost }),
+  connect(mapStateToProps, { editPost, getPostById }),
   withRouter
 )
 export default enhance(EditPost)

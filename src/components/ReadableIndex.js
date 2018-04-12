@@ -1,17 +1,22 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {getPosts, getPostsByCategory } from '../actions/post'
-import {getAllCategories } from '../actions/category'
 import Posts from './Posts'
 import Categories from './Categories'
+import {withRouter} from 'react-router-dom'
 
 
-const ReadableIndex = (props) => (
-  <div>
-    <h1> Readable Index </h1>
-    <Categories/>
-    <Posts/>
-  </div>
-)
 
-export default ReadableIndex
+class ReadableIndex extends Component  {
+
+	render(){
+		console.log('index ' + JSON.stringify(this.props))
+		return(
+		  <div>
+		    <h1> Readable Index </h1>
+		    <Categories />
+			<Posts category={this.props.match.params.category}/>		 
+			</div>
+		)
+	}
+}
+
+export default withRouter(ReadableIndex)

@@ -1,22 +1,23 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { getPosts, postSortOrder , voteForPost, deletePost} from '../../actions/post'
 import { getPostsByCategory} from '../../actions/post'
 import { connect } from 'react-redux'
 import {arrayFromObject } from '../../utils/helpers'
 import { Link } from 'react-router-dom'
-import _ from 'lodash';
 import { Button } from 'react-bootstrap'
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
+
 
 
 class Posts extends Component{
 
   componentDidMount(){
-     if(this.props.match != null){
-        const { category } = this.props.match.params;
+     if(this.props.category != null){
+        const { category } = this.props;
         
         
-        if( category != null){
+       if( category != null){
           this.props.getPostsByCategory(category);
         }else{
           this.props.getPosts();
@@ -24,24 +25,26 @@ class Posts extends Component{
       }else{
         this.props.getPosts();
       }
+
+  }
+
+  componentDidUpdate(prevProps){
+
+    if(prevProps.category !== this.props.category){
+      if(this.props.category){
+        this.props.getPostsByCategory(this.props.category);
+      }else{
+        this.props.getPosts();
+      }
+
+    }
   }
 
 
   render(){
-
-
-    const { posts, match, sortPostsBy, voteForPost, postOrder, deletePost} = this.props
-
-
+    const { posts, voteForPost, postOrder, deletePost} = this.props
     const postsArray = arrayFromObject(posts)
-
-        console.log('POST _> ' + JSON.stringify(posts))
-
-
     const filteredPosts = postsArray.filter(post => !post.deleted );
-
-    console.log('POST _> filtered' + JSON .stringify(postsArray))
-
 
      filteredPosts.sort(function(a, b) {
         if (postOrder === 'timestamp') {
@@ -55,9 +58,6 @@ class Posts extends Component{
         }
       })
 
-
-   //console.log('   this post ' + JSON.stringify(postArray))
-
     return(
       <div className="Posts">
             <h1> Posts </h1>
@@ -68,12 +68,20 @@ class Posts extends Component{
             <ol >
               {filteredPosts.map((post) =>(
                  <li key={post.id}>
-                    <p>{post.title} Votes: {post.voteScore} -- 
-                        <Button onClick={() => voteForPost(post, 'upVote')}  > + </Button>
-                        <Button onClick={() => voteForPost(post, 'downVote')} > - </Button>
-                        <Button onClick={() => deletePost(post.id)} > Del </Button>
-                       <Link to={`/${post.category}/${post.id}`}>Detail</Link>
+                    <p>
+                      <b>{post.title} </b> by <b> {post.author} </b> 
+                      <Button onClick={() => voteForPost(post, 'upVote')}  > + </Button>
+                      <Button onClick={() => voteForPost(post, 'downVote')} > - </Button>
+                      <Button onClick={() => deletePost(post.id)} > Del </Button>
                     </p>
+                    <p>
+                        <Link to={`/${post.category}/${post.id}`}>Detail</Link>
+                        -                          
+                        <Link to={`/edit/${post.id}`}>Edit Post </Link>
+                        <br/>
+                    </p>
+                    <p>Votes: {post.voteScore}</p>
+                    <p>Comments: {post.commentCount} </p>
                  </li>
               ))}
               </ol>
@@ -82,7 +90,11 @@ class Posts extends Component{
   }
 }
 
-const mapStateToProps = ({ postOrder, posts}) => ({ postOrder,posts})
+const mapStateToProps = ({ postOrder, posts, post}) => ({ postOrder,posts, post})
 
  
-export default connect(mapStateToProps, { getPosts, getPostsByCategory, postSortOrder, voteForPost, deletePost })(Posts)
+const enhance = compose(
+  connect(mapStateToProps, { getPosts, getPostsByCategory, postSortOrder, voteForPost, deletePost }),
+  withRouter
+)
+export default enhance(Posts)

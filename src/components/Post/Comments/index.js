@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Comment from './comment'
-import _ from 'lodash';
 import CreateComment from './CreateComment'
 import { arrayFromObject} from '../../../utils/helpers.js'
 
@@ -9,9 +8,6 @@ import { arrayFromObject} from '../../../utils/helpers.js'
 
 class Comments extends Component {
 
-	componentDidMount(){
-		console.log('didMount ' + JSON.stringify(this.props))
-	}
 
 	render () {
 	    const {comments, post} = this.props

@@ -1,14 +1,11 @@
 import _  from 'lodash'
-import {combineReducers} from 'redux'
-import {objectFromArray , arrayFromObject} from '../utils/helpers'
+import { arrayFromObject} from '../utils/helpers'
 
 
 import {
     GET_POSTS,
     CREATE_POST,
     EDIT_POST,
-    GET_POST_BY_ID,
-    POST_SORT_ORDER,
     VOTE_POST, 
     GET_POSTS_BY_CAT,
     DELETE_POST
@@ -22,13 +19,12 @@ function posts (state = { } , action){
          case CREATE_POST:
           return {
             ...state,
-            ... action.posts
+            ...action.posts
           };
 
          case EDIT_POST:
-           console.log('--- edit post reducer ' + JSON.stringify(state) + ' ' + JSON.stringify(action));
               return {
-              ... action.posts
+              ...action.posts
             }
 
         case GET_POSTS:
@@ -38,11 +34,10 @@ function posts (state = { } , action){
             }
         case GET_POSTS_BY_CAT:
             return {
-              ... action.posts
+              ...action.posts
             }
          case DELETE_POST:
           const arrayStateDel = arrayFromObject(  state);
-          console.log('--- delete post arrayStateDel ' + JSON.stringify(arrayStateDel) + ' ' + JSON.stringify(action));
           const delIndex = _.findIndex(arrayStateDel,o=>o.id === action.data.id);
 
 

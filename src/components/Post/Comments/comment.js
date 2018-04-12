@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getPostById } from '../../../actions/post'
-import { getPostComments, voteForComment, deleteComment} from '../../../actions/comment'
+import {  voteForComment, deleteComment} from '../../../actions/comment'
 import { Button } from 'react-bootstrap'
 import CreateComment from './CreateComment'
 
@@ -20,7 +17,7 @@ class Comment extends Component {
 
 	render(){
 		const { edit } = this.state
-		const {comment , voteForComment, history, deleteComment} = this.props;
+		const {comment , voteForComment, deleteComment} = this.props;
 			 
 			if (edit) {
 			      return (
@@ -30,7 +27,7 @@ class Comment extends Component {
 			          defaults={{id : comment.id, body: comment.body, author: comment.author}}
 			        />
 			      )
-			}else{
+			}
 
 				return (
 					<div key={comment.id}> 
@@ -43,7 +40,6 @@ class Comment extends Component {
                         <Button onClick={() => deleteComment(comment.id)} > Del </Button>
 
 					</div>);
-			}	
 	}
 }
 

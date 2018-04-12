@@ -1,19 +1,11 @@
-import { fetchCategories 
-      , fetchAllPosts
-      , fetchPostsByCategory
-      , createPostAPI , editCommentAPI, fetchPostById, editPostAPI, votePostAPI, fetchPostComments
-      , createCommentAPI,
-      deletePostAPI ,voteCommentAPI, 
-    deleteCommentAPI} from '../utils/api'
-import api from '../utils/api'
+import { fetchCategories } from '../utils/api'
 
 
 export const GET_CATEGORIES = 'GET_CATEGORIES'
 
 
 export const getAllCategories = () => dispatch => (
-  fetchCategories().
-    then(
+  fetchCategories().then(
       categories => {
             dispatch({
               type: GET_CATEGORIES,

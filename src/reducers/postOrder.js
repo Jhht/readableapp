@@ -12,7 +12,7 @@ function postOrder(state = { sortBy : 'voteScore'} , action) {
     }
 }
 
-expoort default postOrder
+export default postOrder
 
 
 

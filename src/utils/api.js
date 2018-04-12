@@ -32,8 +32,6 @@ export function fetchPostById( id ){
 }
 
 export function fetchPostsByCategory( category ) {
-
-
   const url = 'http://localhost:3001';
   return fetch(`${url}/${category}/posts`, { headers: { 'Authorization': 'whatever-you-want', 'Content-Type' : 'application/json' }})
     .then((res) =>  res.json()
@@ -42,7 +40,6 @@ export function fetchPostsByCategory( category ) {
 }
 
 export function createPostAPI( post ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/posts/';
 
   var headers = new Headers();
@@ -61,11 +58,7 @@ export function createPostAPI( post ) {
 
 
 export function editPostAPI( post ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/posts/' + post.id;
-
-  console.log('--- api fetch edit post ## ' + JSON.stringify(urlA));
-  console.log('--- api fetch edit post ## ' + JSON.stringify(post));
 
   var headers = new Headers();
   headers.append('Content-Type', 'application/json');
@@ -81,7 +74,6 @@ export function editPostAPI( post ) {
 }
 
 export function deletePostAPI( id ){
-  const  keyPath = null
   const urlA = 'http://localhost:3001/posts/' + id;
 
 
@@ -97,7 +89,6 @@ export function deletePostAPI( id ){
 }
 
 export function votePostAPI( post, vote ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/posts/' + post.id;
 
 
@@ -115,7 +106,6 @@ export function votePostAPI( post, vote ) {
 }
 
 export function voteCommentAPI( comment, vote ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/comments/' + comment.id;
 
 
@@ -133,8 +123,6 @@ export function voteCommentAPI( comment, vote ) {
 }
 
 export function fetchPostComments( postId ){
-
- const  keyPath = null
   const urlA = 'http://localhost:3001/posts/' + postId +'/comments';
 
 
@@ -150,7 +138,6 @@ export function fetchPostComments( postId ){
 }
 
 export function createCommentAPI( comment ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/comments/';
 
   var headers = new Headers();
@@ -167,7 +154,6 @@ export function createCommentAPI( comment ) {
 }
 
 export function editCommentAPI( comment ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/comments/'+ comment.id;
 
   var headers = new Headers();
@@ -178,18 +164,15 @@ export function editCommentAPI( comment ) {
     method: 'PUT',
     headers: headers
   };
-  console.log(' comment body ' + JSON.stringify(comment))
 
   if(comment){
     init.body = JSON.stringify(comment);
   }
 
-  console.log('## editComment body ' + JSON.stringify(init))
   return fetch(urlA, init).then((response) => response.json())
 }
 
 export function deleteCommentAPI( id, body, timestamp ) {
-  const  keyPath = null
   const urlA = 'http://localhost:3001/comments/'+ id;
 
   var headers = new Headers();

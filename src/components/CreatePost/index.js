@@ -1,28 +1,28 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import{createPost} from '../../actions/post';
 import {withRouter} from 'react-router-dom'
 import {compose} from 'recompose'
-
-import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
+import { Link } from 'react-router-dom'
+import {FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap';
 
 
 class PostForm extends Component {
  
-  initialState = {
-    author: '',
-    category: 'select',
-    title: '',
-    body: '',
-  };
+ 
 
 
   // initialState, handlers
   constructor(props){
 
     super(props)
-    this.state = this.initialState;
+    this.initialState = {
+      author: '',
+      category: 'select',
+      title: '',
+      body: '',
+    };
+    this.setState(this.initialState);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -78,7 +78,7 @@ class PostForm extends Component {
 
 
   render() {
-    const {author, category, title, body} = this.state
+    const {author, title, body} = this.state
     const {categories} = this.props;
 
     return (
@@ -113,7 +113,7 @@ class PostForm extends Component {
         </FormGroup>
         <Button bsStyle="primary" type="submit" >Create Post</Button>
         <Button bsStyle="primary" type="submit" onClick={this.handleCancel}>Cancel</Button>
-
+        <Link to={'/'}>Back to all post </Link>  
       </form>
     )
   }

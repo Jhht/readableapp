@@ -1,10 +1,7 @@
-import { fetchCategories 
-      , fetchAllPosts
+import { fetchAllPosts
       , fetchPostsByCategory
-      , createPostAPI , editCommentAPI, fetchPostById, editPostAPI, votePostAPI, fetchPostComments
-      , createCommentAPI,
-      deletePostAPI ,voteCommentAPI, 
-    deleteCommentAPI} from '../utils/api'
+      , createPostAPI , fetchPostById, editPostAPI, votePostAPI,
+      deletePostAPI } from '../utils/api'
 
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POSTS_BY_CAT = 'GET_POSTS_BY_CAT'
@@ -41,7 +38,6 @@ export const getPostById= ( id ) => dispatch => (
     fetchPostById( id )
      .then(
       post => {
-           console.log('api posts id ' + JSON.stringify(post))
 
             dispatch({
               type: GET_POST_BY_ID,
@@ -65,7 +61,6 @@ export const editPost = ( post ) => dispatch => (
   editPostAPI( post )
      .then(
       data => {
-            console.log('api posts edit' + JSON.stringify(data))
             dispatch({
               type: EDIT_POST,
               data           

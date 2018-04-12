@@ -1,39 +1,47 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import  Comments  from './Comments'
-import { getPostById  } from '../../actions/post'
+import { getPostById, deletePost  } from '../../actions/post'
 import { getPostComments} from '../../actions/comment'
-
+import { Button } from 'react-bootstrap'
+import {formatDate, arrayFromObject} from '../../utils/helpers'
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
+import ErrorCmp from '../Error'
 
 class Post extends Component {
 
 	componentDidMount(){
-		console.log('## didMount Post ' + this.props.match.params);
-		this.props.getPostById(this.props.match.params.postId);
-		this.props.getPostComments(this.props.match.params.postId);
+		this.props.getPostById(this.props.match.params.postId)
+		this.props.getPostComments(this.props.match.params.postId)
+
+		
 	}
 
 	render(){
-		const {post} = this.props;
-		const postTime = post.timestamp
-		const date = new Date( postTime*1000);
-		const hours = date.getHours();
-		const minutes = "0" + date.getMinutes();
-		const seconds = "0" + date.getSeconds();
+		const {post, deletePost} = this.props;
+		const postTime = formatDate(post.timestamp)
 
-		const formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+		let arryPost = arrayFromObject(this.props.post)
+
+		console.log('--- ' + arryPost.length)
+
+		if(arryPost.length === 0)
+			return ( <ErrorCmp />)
+		
 		return (
 			<div key={post.id}> 
 				<p>Title: {post.title}</p>
 				<p>Author: {post.author}</p>
-				<p>Time: {formattedTime}</p>
+				<p>Comments: {post.commentCount}</p>
+				<p>Time: {postTime}</p>
 				<p>Category: {post.category}</p>
 				<p>Body: {post.body}</p>
-				<Link to={`/edit/${post.id}`}>Edit Post </Link>
-				<p/>
-				<Link to={'/'}>Back to all post </Link>
+				<Button onClick={() => deletePost(post.id)} > Delete me :( </Button>
+				<br/>
+				<p><Link to={`/edit/${post.id}`}>Edit Post </Link>   <b>or</b>
+				<Link to={'/'}>Back to all post </Link>  </p>
 				<Comments key={post.id} post={post}/>
 			</div>);
 	}
@@ -41,4 +49,8 @@ class Post extends Component {
 
 const mapStateToProps = ({ comments, post}) => ({ comments,post})
 
-export default connect(mapStateToProps, {getPostById, getPostComments} )(Post)
+const enhance = compose(
+  connect(mapStateToProps, {getPostById, getPostComments, deletePost}),
+  withRouter
+)
+export default enhance(Post)

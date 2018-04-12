@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getAllCategories} from '../actions/category'
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
+
 
 
 class Categories extends Component {
@@ -12,9 +14,8 @@ class Categories extends Component {
   }
 
   render() {  
-    console.log('cats ' + JSON.stringify(this.props.categories))
     const { categories } = this.props
-    const list = this.props.categories.map((categorie) => {
+    const list = categories.map((categorie) => {
       return (
         <li key={categorie.name}>
           <Link to={`/${categorie.name}`}>{categorie.name}</Link>
@@ -47,4 +48,9 @@ const All = () => {
 
 const mapStateToProps = ({ categories}) => ({ categories})
 
-export default connect(mapStateToProps, {getAllCategories} )(Categories)
+
+const enhance = compose(
+  connect(mapStateToProps, {getAllCategories} ),
+  withRouter
+)
+export default enhance(Categories)

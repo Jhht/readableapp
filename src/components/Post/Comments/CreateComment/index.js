@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect , withRouter} from 'react-redux';
+import {connect } from 'react-redux';
 import{createComment , editComment} from '../../../../actions/comment';
-import {FormGroup, FormControl, ControlLabel, Button, ButtonGroup} from 'react-bootstrap';
+import {FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap';
 
 
 class CreateComment extends Component {
@@ -24,7 +23,7 @@ class CreateComment extends Component {
     this.handleCancel = this.handleCancel.bind(this);
 
 
-    const { defaults , toggleEdit} = this.props;
+    const { defaults } = this.props;
 
     if(defaults){
       var newState = {id : defaults.id, author: defaults.author, body: defaults.body};
@@ -56,8 +55,8 @@ class CreateComment extends Component {
 
   // create a new post
   createComment() {
-    const {author, body, edit, id} = this.state;
-    const { history, post, toggleEdit } = this.props;
+    const {author, body, id} = this.state;
+    const { post, toggleEdit } = this.props;
 
    
 
@@ -70,6 +69,7 @@ class CreateComment extends Component {
           parentId : post.id,
       }
       this.props.editComment( commentUpdate )
+      toggleEdit();
     }else{
       const commentCreate = {//testing
           id : guid(),
@@ -86,7 +86,7 @@ class CreateComment extends Component {
 
   render() {
     const {author, body} = this.state
-    const {comment, toggleEdit} = this.props;
+    const {toggleEdit} = this.props;
 
     const button = toggleEdit ? (
       <div>
